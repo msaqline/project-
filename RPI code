@@ -1,0 +1,48 @@
+// Sketch for Particle Photon - PIR Sensor / Motion Detection
+// By Anton
+
+int inputPin = D4;              // choose the input pin (for PIR sensor)
+int ledPin = D5;               // LED Pin
+//int pirState = LOW;             // we start, assuming no motion detected
+int count = 0;// variable for reading the pin status
+
+
+
+void setup() 
+{
+    pinMode(ledPin, OUTPUT);
+    pinMode(inputPin, INPUT);     // declare sensor as input
+}
+
+void loop() 
+{
+    detect();
+    delay(5000);
+
+}
+void call()
+{
+    Particle.publish("call-seydus-particle", "Danger", PUBLIC);
+}
+
+
+void detect()
+{
+    if (digitalRead(inputPin) == HIGH) 
+    {
+        
+        Particle.publish("Motion", "Motion Detected", PRIVATE);
+        count = 0;
+        
+    } 
+    else
+    {
+    
+        Particle.publish("Motion", "Motion Not Detected", PRIVATE);
+        count++;    
+    }
+    if(count >= 4)
+    {
+        call();
+    }
+}
